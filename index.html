@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Облік продукції" />
+  <title>Облік готової продукції</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside id="sideMenu" class="side-menu" aria-hidden="true">
+      <div class="menu-head">
+        <div>
+          <b>Облік продукції</b>
+          <span>готова продукція</span>
+        </div>
+        <button id="closeMenuBtn" class="icon-btn" aria-label="Закрити меню">×</button>
+      </div>
+      <nav class="menu-list">
+        <button data-route="home">Облік продукції</button>
+        <button data-route="products">Довідник продукції</button>
+        <button data-route="history">Історія документів</button>
+        <button data-route="settings">Налаштування</button>
+        <button data-route="about">Про програму</button>
+      </nav>
+    </aside>
+    <div id="overlay" class="overlay"></div>
+
+    <header class="topbar">
+      <button id="openMenuBtn" class="icon-btn menu-btn" aria-label="Відкрити меню">☰</button>
+      <div>
+        <h1 id="pageTitle">Облік продукції</h1>
+        <p id="todayLabel"></p>
+      </div>
+    </header>
+
+    <main class="content">
+      <section id="view-home" class="view active">
+        <div class="card input-card">
+          <div class="field search-wrap">
+            <label for="productSearch">Продукція</label>
+            <div class="search-line">
+              <input id="productSearch" autocomplete="off" placeholder="Пошук або вибір продукції" />
+              <button id="clearSearchBtn" class="clear-btn" aria-label="Очистити">×</button>
+            </div>
+            <div id="productDropdown" class="dropdown"></div>
+          </div>
+
+          <div id="setupWarning" class="warning hidden"></div>
+
+          <div class="field pallets-field">
+            <label for="palletsInput">Кількість піддонів</label>
+            <input id="palletsInput" inputmode="decimal" type="number" min="0" step="0.01" placeholder="Наприклад: 5" />
+          </div>
+
+          <details id="detailsBox" class="details-box">
+            <summary>Деталі</summary>
+            <div class="details-grid">
+              <div class="field">
+                <label for="boxesPerPalletInput">Ящиків на піддоні</label>
+                <input id="boxesPerPalletInput" inputmode="decimal" type="number" min="0" step="0.01" />
+              </div>
+              <div class="field">
+                <label for="unitsPerBoxInput">Одиниць у ящику</label>
+                <input id="unitsPerBoxInput" inputmode="decimal" type="number" min="0" step="0.01" />
+              </div>
+              <div class="field">
+                <label for="unitInput">Одиниця обліку</label>
+                <select id="unitInput">
+                  <option value="пачки">пачки</option>
+                  <option value="кг">кг</option>
+                  <option value="шт">шт</option>
+                </select>
+              </div>
+            </div>
+          </details>
+
+          <div class="result-box">
+            <span>Автоматичний результат</span>
+            <strong id="liveResult">0</strong>
+            <small id="liveCalc">Оберіть продукцію і введіть піддони</small>
+          </div>
+
+          <button id="addItemBtn" class="primary-btn">Додати</button>
+        </div>
+
+        <section class="section-head">
+          <h2>Поточний документ</h2>
+          <span id="currentCount">0 позицій</span>
+        </section>
+        <div id="currentItems" class="items-list empty-state">Позицій ще немає</div>
+        <button id="finishDocBtn" class="finish-btn">Завершити документ</button>
+      </section>
+
+      <section id="view-products" class="view">
+        <div class="card">
+          <button id="showBulkAddBtn" class="primary-btn">Додати продукцію</button>
+          <div id="bulkAddBox" class="bulk-box hidden">
+            <textarea id="bulkNamesInput" rows="7" placeholder="Введіть одну або кілька назв. Кожна назва — з нового рядка."></textarea>
+            <button id="bulkAddBtn" class="primary-btn">Додати</button>
+          </div>
+        </div>
+        <div id="productsList" class="items-list"></div>
+      </section>
+
+      <section id="view-preview" class="view">
+        <div class="notice">Документ ще не збережений.</div>
+        <div class="preview-toolbar">
+          <label class="switch-row"><input id="showCalcToggle" type="checkbox" /> Показувати розрахунок</label>
+          <div class="toolbar-actions">
+            <button id="editDocBtn" class="ghost-btn">Редагувати</button>
+            <button id="createPdfBtn" class="primary-btn">Створити PDF</button>
+          </div>
+        </div>
+        <div id="pdfPreview" class="pdf-preview"></div>
+      </section>
+
+      <section id="view-history" class="view">
+        <div id="historyList" class="items-list empty-state">Історія порожня</div>
+      </section>
+
+      <section id="view-settings" class="view">
+        <div class="card">
+          <h2>Налаштування</h2>
+          <label class="switch-row"><input id="settingsShowCalc" type="checkbox" /> Показувати розрахунок у PDF</label>
+          <button id="clearCurrentBtn" class="danger-btn">Очистити поточний документ</button>
+        </div>
+      </section>
+
+      <section id="view-about" class="view">
+        <div class="card about-card">
+          <h2>Про програму</h2>
+          <p>Офлайн PWA для швидкого обліку готової продукції, піддонів, ящиків і підсумків по одиницях обліку.</p>
+          <p>Дані зберігаються локально в IndexedDB. Інтернет не потрібен.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="productDialog" class="modal">
+    <form method="dialog" id="productForm" class="modal-card">
+      <h2>Редагування продукції</h2>
+      <input type="hidden" id="editProductId" />
+      <div class="field"><label>Назва</label><input id="editName" required /></div>
+      <div class="field"><label>Ящиків на піддоні</label><input id="editBoxes" type="number" min="0" step="0.01" /></div>
+      <div class="field"><label>Одиниць у ящику</label><input id="editUnits" type="number" min="0" step="0.01" /></div>
+      <div class="field"><label>Одиниця обліку</label><select id="editUnit"><option value="пачки">пачки</option><option value="кг">кг</option><option value="шт">шт</option></select></div>
+      <div class="modal-actions"><button value="cancel" class="ghost-btn">Скасувати</button><button id="saveProductBtn" value="default" class="primary-btn">Зберегти</button></div>
+    </form>
+  </dialog>
+
+  <script src="libs/jspdf.umd.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
