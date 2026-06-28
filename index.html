@@ -13,149 +13,114 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <div class="app-shell">
-    <aside id="sideMenu" class="side-menu" aria-hidden="true">
+  <div class="app">
+    <aside id="menu" class="menu">
       <div class="menu-head">
-        <div>
-          <b>Облік продукції</b>
-          <span>готова продукція</span>
-        </div>
-        <button id="closeMenuBtn" class="icon-btn" aria-label="Закрити меню">×</button>
+        <div><b>Облік продукції</b><span>готова продукція</span></div>
+        <button id="closeMenu" class="icon-btn">×</button>
       </div>
-      <nav class="menu-list">
-        <button data-route="home">Облік продукції</button>
-        <button data-route="products">Довідник продукції</button>
-        <button data-route="history">Історія документів</button>
-        <button data-route="settings">Налаштування</button>
-        <button data-route="about">Про програму</button>
-      </nav>
+      <button data-view="home">Облік продукції</button>
+      <button data-view="products">Довідник продукції</button>
+      <button data-view="history">Історія документів</button>
+      <button data-view="settings">Налаштування</button>
+      <button data-view="about">Про програму</button>
     </aside>
-    <div id="overlay" class="overlay"></div>
+    <div id="shade" class="shade"></div>
 
     <header class="topbar">
-      <button id="openMenuBtn" class="icon-btn menu-btn" aria-label="Відкрити меню">☰</button>
-      <div>
-        <h1 id="pageTitle">Облік продукції</h1>
-        <p id="todayLabel"></p>
-      </div>
+      <button id="openMenu" class="icon-btn menu-btn">☰</button>
+      <div><h1 id="title">Облік продукції</h1><p id="dateLine"></p></div>
     </header>
 
-    <main class="content">
-      <section id="view-home" class="view active">
-        <div class="card input-card">
-          <div class="field search-wrap">
-            <label for="productSearch">Продукція</label>
-            <div class="search-line">
-              <input id="productSearch" autocomplete="off" placeholder="Пошук або вибір продукції" />
-              <button id="clearSearchBtn" class="clear-btn" aria-label="Очистити">×</button>
-            </div>
-            <div id="productDropdown" class="dropdown"></div>
+    <main>
+      <section id="home" class="view active">
+        <div class="card form-card">
+          <label>Продукція</label>
+          <div class="searchbox">
+            <input id="productSearch" placeholder="Пошук або вибір продукції" autocomplete="off">
+            <button id="clearSearch" class="clear-btn">×</button>
           </div>
+          <div id="dropdown" class="dropdown"></div>
+          <div id="warning" class="warning hidden"></div>
 
-          <div id="setupWarning" class="warning hidden"></div>
+          <label for="pallets">Кількість піддонів</label>
+          <input id="pallets" class="big-input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Наприклад: 5">
 
-          <div class="field pallets-field">
-            <label for="palletsInput">Кількість піддонів</label>
-            <input id="palletsInput" inputmode="decimal" type="number" min="0" step="0.01" placeholder="Наприклад: 5" />
-          </div>
-
-          <details id="detailsBox" class="details-box">
+          <details class="details">
             <summary>Деталі</summary>
-            <div class="details-grid">
-              <div class="field">
-                <label for="boxesPerPalletInput">Ящиків на піддоні</label>
-                <input id="boxesPerPalletInput" inputmode="decimal" type="number" min="0" step="0.01" />
-              </div>
-              <div class="field">
-                <label for="unitsPerBoxInput">Одиниць у ящику</label>
-                <input id="unitsPerBoxInput" inputmode="decimal" type="number" min="0" step="0.01" />
-              </div>
-              <div class="field">
-                <label for="unitInput">Одиниця обліку</label>
-                <select id="unitInput">
-                  <option value="пачки">пачки</option>
-                  <option value="кг">кг</option>
-                  <option value="шт">шт</option>
-                </select>
-              </div>
+            <div class="grid3">
+              <div><label>Ящиків на піддоні</label><input id="boxesPerPallet" type="number" inputmode="decimal" min="0" step="0.01"></div>
+              <div><label>Одиниць у ящику</label><input id="unitsPerBox" type="number" inputmode="decimal" min="0" step="0.01"></div>
+              <div><label>Одиниця обліку</label><select id="unit"><option>пачки</option><option>кг</option><option>шт</option></select></div>
             </div>
           </details>
 
-          <div class="result-box">
-            <span>Автоматичний результат</span>
-            <strong id="liveResult">0</strong>
-            <small id="liveCalc">Оберіть продукцію і введіть піддони</small>
-          </div>
-
-          <button id="addItemBtn" class="primary-btn">Додати</button>
+          <div class="result"><span>Автоматичний результат</span><b id="liveResult">0</b><small id="liveCalc">Оберіть продукцію</small></div>
+          <button id="addItem" class="primary">Додати</button>
         </div>
 
-        <section class="section-head">
-          <h2>Поточний документ</h2>
-          <span id="currentCount">0 позицій</span>
-        </section>
-        <div id="currentItems" class="items-list empty-state">Позицій ще немає</div>
-        <button id="finishDocBtn" class="finish-btn">Завершити документ</button>
+        <div class="section-title"><h2>Поточний документ</h2><span id="itemCount">0 позицій</span></div>
+        <div id="currentItems" class="list empty">Позицій ще немає</div>
+        <button id="finishDoc" class="finish">Завершити документ</button>
       </section>
 
-      <section id="view-products" class="view">
+      <section id="products" class="view">
         <div class="card">
-          <button id="showBulkAddBtn" class="primary-btn">Додати продукцію</button>
-          <div id="bulkAddBox" class="bulk-box hidden">
-            <textarea id="bulkNamesInput" rows="7" placeholder="Введіть одну або кілька назв. Кожна назва — з нового рядка."></textarea>
-            <button id="bulkAddBtn" class="primary-btn">Додати</button>
+          <button id="toggleBulk" class="primary">Додати продукцію</button>
+          <div id="bulkBox" class="bulk hidden">
+            <textarea id="bulkNames" rows="7" placeholder="Введіть одну або кілька назв. Кожна назва — з нового рядка."></textarea>
+            <button id="bulkAdd" class="primary">Додати</button>
           </div>
         </div>
-        <div id="productsList" class="items-list"></div>
+        <div id="productsList" class="list"></div>
       </section>
 
-      <section id="view-preview" class="view">
+      <section id="preview" class="view">
         <div class="notice">Документ ще не збережений.</div>
-        <div class="preview-toolbar">
-          <label class="switch-row"><input id="showCalcToggle" type="checkbox" /> Показувати розрахунок</label>
-          <div class="toolbar-actions">
-            <button id="editDocBtn" class="ghost-btn">Редагувати</button>
-            <button id="createPdfBtn" class="primary-btn">Створити PDF</button>
-          </div>
+        <div class="toolbar">
+          <label class="check"><input id="showCalc" type="checkbox"> Показувати розрахунок</label>
+          <div><button id="editDoc" class="secondary">Редагувати</button><button id="createPdf" class="primary">Створити PDF</button></div>
         </div>
-        <div id="pdfPreview" class="pdf-preview"></div>
+        <div id="previewPaper" class="paper"></div>
       </section>
 
-      <section id="view-history" class="view">
-        <div id="historyList" class="items-list empty-state">Історія порожня</div>
+      <section id="history" class="view">
+        <div id="historyList" class="list empty">Історія порожня</div>
       </section>
 
-      <section id="view-settings" class="view">
+      <section id="settings" class="view">
         <div class="card">
-          <h2>Налаштування</h2>
-          <label class="switch-row"><input id="settingsShowCalc" type="checkbox" /> Показувати розрахунок у PDF</label>
-          <button id="clearCurrentBtn" class="danger-btn">Очистити поточний документ</button>
+          <h2>Резервна копія</h2>
+          <p class="muted">Експорт зберігає довідник, поточний документ, історію та налаштування.</p>
+          <button id="exportBackup" class="primary">Експорт резервної копії</button>
+          <label class="file-btn"><input id="importBackup" type="file" accept="application/json,.json"> Імпорт резервної копії</label>
+        </div>
+        <div class="card danger-card">
+          <h2>Поточний документ</h2>
+          <button id="clearCurrent" class="danger">Очистити поточний документ</button>
         </div>
       </section>
 
-      <section id="view-about" class="view">
-        <div class="card about-card">
-          <h2>Про програму</h2>
-          <p>Офлайн PWA для швидкого обліку готової продукції, піддонів, ящиків і підсумків по одиницях обліку.</p>
-          <p>Дані зберігаються локально в IndexedDB. Інтернет не потрібен.</p>
-        </div>
+      <section id="about" class="view">
+        <div class="card"><h2>Про програму</h2><p>Офлайн PWA для обліку готової продукції. Дані зберігаються локально в IndexedDB.</p></div>
       </section>
     </main>
   </div>
 
-  <dialog id="productDialog" class="modal">
-    <form method="dialog" id="productForm" class="modal-card">
+  <template id="editProductTemplate">
+    <div class="modal-wrap"><div class="modal">
       <h2>Редагування продукції</h2>
-      <input type="hidden" id="editProductId" />
-      <div class="field"><label>Назва</label><input id="editName" required /></div>
-      <div class="field"><label>Ящиків на піддоні</label><input id="editBoxes" type="number" min="0" step="0.01" /></div>
-      <div class="field"><label>Одиниць у ящику</label><input id="editUnits" type="number" min="0" step="0.01" /></div>
-      <div class="field"><label>Одиниця обліку</label><select id="editUnit"><option value="пачки">пачки</option><option value="кг">кг</option><option value="шт">шт</option></select></div>
-      <div class="modal-actions"><button value="cancel" class="ghost-btn">Скасувати</button><button id="saveProductBtn" value="default" class="primary-btn">Зберегти</button></div>
-    </form>
-  </dialog>
+      <label>Назва</label><input id="editName">
+      <label>Ящиків на піддоні</label><input id="editBoxes" type="number" min="0" step="0.01" inputmode="decimal">
+      <label>Одиниць у ящику</label><input id="editUnits" type="number" min="0" step="0.01" inputmode="decimal">
+      <label>Одиниця обліку</label><select id="editUnit"><option>пачки</option><option>кг</option><option>шт</option></select>
+      <div class="modal-actions"><button id="cancelEdit" class="secondary">Скасувати</button><button id="saveEdit" class="primary">Зберегти</button></div>
+    </div></div>
+  </template>
 
   <script src="libs/jspdf.umd.min.js"></script>
-  <script type="module" src="js/app.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/pdf.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
