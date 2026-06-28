@@ -9,6 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Облік продукції" />
   <title>Облік готової продукції</title>
   <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" type="image/png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -61,7 +62,18 @@
 
         <div class="section-title"><h2>Поточний документ</h2><span id="itemCount">0 позицій</span></div>
         <div id="currentItems" class="list empty">Позицій ще немає</div>
+<<<<<<< HEAD
+        <div class="document-actions">
+          <button id="newDocument" class="secondary">➕ Створити новий документ</button>
+          <button id="clearDocument" class="danger">🗑 Очистити документ</button>
+        </div>
+        <div class="finish-actions">
+          <button id="previewDoc" class="secondary">Попередній перегляд</button>
+          <button id="finishDoc" class="finish">Завершити документ</button>
+        </div>
+=======
         <button id="finishDoc" class="finish">Завершити документ</button>
+>>>>>>> 7f82b804c58402fdcf34e858fee683ec12050ee9
       </section>
 
       <section id="products" class="view">
@@ -72,11 +84,26 @@
             <button id="bulkAdd" class="primary">Додати</button>
           </div>
         </div>
+<<<<<<< HEAD
+        <div class="card catalog-search-card">
+          <label for="catalogSearch">Пошук у довіднику</label>
+          <div class="searchbox">
+            <input id="catalogSearch" placeholder="Введіть назву продукції" autocomplete="off">
+            <button id="clearCatalogSearch" class="clear-btn" aria-label="Очистити пошук">×</button>
+          </div>
+        </div>
+=======
+>>>>>>> 7f82b804c58402fdcf34e858fee683ec12050ee9
         <div id="productsList" class="list"></div>
       </section>
 
       <section id="preview" class="view">
+<<<<<<< HEAD
+        <button id="backToHistory" class="secondary back-button hidden">← Назад</button>
+        <div id="previewNotice" class="notice">Документ ще не збережений.</div>
+=======
         <div class="notice">Документ ще не збережений.</div>
+>>>>>>> 7f82b804c58402fdcf34e858fee683ec12050ee9
         <div class="toolbar">
           <label class="check"><input id="showCalc" type="checkbox"> Показувати розрахунок</label>
           <div><button id="editDoc" class="secondary">Редагувати</button><button id="createPdf" class="primary">Створити PDF</button></div>
@@ -97,7 +124,11 @@
         </div>
         <div class="card danger-card">
           <h2>Поточний документ</h2>
+<<<<<<< HEAD
+          <button id="clearCurrent" class="danger">🗑 Очистити документ</button>
+=======
           <button id="clearCurrent" class="danger">Очистити поточний документ</button>
+>>>>>>> 7f82b804c58402fdcf34e858fee683ec12050ee9
         </div>
       </section>
 
